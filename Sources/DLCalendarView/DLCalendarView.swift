@@ -9,8 +9,8 @@
 import SwiftUI
 import DLExtensions
 
-struct DLCalendarConstants {
-    struct font {
+public struct DLCalendarConstants {
+    public struct font {
         static let dayFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).pointSize-2)
         static let selectedDayFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).pointSize-2)
         static let weekNumberFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .footnote).pointSize-2)
@@ -21,18 +21,18 @@ struct DLCalendarConstants {
 
 }
 
-struct DLCalendarView: View {
+public struct DLCalendarView: View {
     
-    @Binding var selectedDate: Date
+    @Binding public var selectedDate: Date
 
-    @State var currentMonth: Int
-    @State var currentYear: Int
-    @Binding var showCalendar: Bool
-    @State var refresh: Bool = false
-    var flaggedDays: [Int]?
+    @State public var currentMonth: Int
+    @State public var currentYear: Int
+    @Binding public var showCalendar: Bool
+    @State public var refresh: Bool = false
+    public var flaggedDays: [Int]?
     
-    typealias MonthChange = ((Int, Int)->Void)
-    @State var onMonthChangeAction: MonthChange?
+    public typealias MonthChange = ((Int, Int)->Void)
+    @State public var onMonthChangeAction: MonthChange?
     
     public func onMonthChange(perform action: @escaping MonthChange) -> some View {
         return DLCalendarView(selectedDate: self.$selectedDate, currentMonth: self.currentMonth, currentYear: self.currentYear, showCalendar: self.$showCalendar, refresh: self.refresh, flaggedDays: self.flaggedDays, onMonthChangeAction: action)
@@ -59,7 +59,7 @@ struct DLCalendarView: View {
         }
     }
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 3) {
             HStack {
                 HStack {
@@ -324,7 +324,7 @@ struct DLCalendarCell: View {
 }
 
 struct DLCalendar_Preview: PreviewProvider {
-    static var previews: some View {
+    public static var previews: some View {
         DLCalendarView(selectedDate: .constant(Date()), currentMonth: 8, currentYear: 2020, showCalendar: .constant(true))
     }
 }
