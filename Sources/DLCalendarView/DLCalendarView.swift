@@ -34,6 +34,16 @@ public struct DLCalendarView: View {
     public typealias MonthChange = ((Int, Int)->Void)
     @State public var onMonthChangeAction: MonthChange?
     
+    public init(selectedDate: Binding<Date>, currentMonth: Int, currentYear: Int, showCalendar: Binding<Bool>, refresh: Bool = false, flaggedDays: [Int]? = nil, onMonthChangeAction: MonthChange? = nil) {
+        self._currentMonth = State(wrappedValue: currentMonth)
+        self._currentYear = State(wrappedValue: currentYear)
+        self._showCalendar = showCalendar
+        self._selectedDate = selectedDate
+        self._refresh = State(wrappedValue: refresh)
+        self.flaggedDays = flaggedDays
+        self._onMonthChangeAction = State(wrappedValue: onMonthChangeAction)
+    }
+    
     public func onMonthChange(perform action: @escaping MonthChange) -> some View {
         return DLCalendarView(selectedDate: self.$selectedDate, currentMonth: self.currentMonth, currentYear: self.currentYear, showCalendar: self.$showCalendar, refresh: self.refresh, flaggedDays: self.flaggedDays, onMonthChangeAction: action)
     }
