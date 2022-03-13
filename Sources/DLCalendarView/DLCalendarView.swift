@@ -9,19 +9,34 @@
 import SwiftUI
 import DLExtensions
 
-public struct DLCalendarConstants {
-    public struct font {
-        static let dayFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).pointSize-2)
-        static let selectedDayFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).pointSize-2)
-        static let weekNumberFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .footnote).pointSize-2)
-        static let dayOfWeekFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .footnote).pointSize-3)
-        static let currentMonth = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .footnote).pointSize)
-
+public class DLCalendarStyle {
+    public var dayFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).pointSize-2)
+    public var selectedDayFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).pointSize-2)
+    public var weekNumberFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .footnote).pointSize-2)
+    public var dayOfWeekFont = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .footnote).pointSize-3)
+    public var currentMonth = Font.system(size: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .footnote).pointSize)
+    
+    public init(dayFont: Font? = nil, selectedDayFont: Font? = nil, weekNumberFont: Font? = nil, dayOfWeekFont: Font? = nil, currentMonthFont: Font? = nil) {
+        if dayFont != nil {
+            self.dayFont = dayFont!
+        }
+        if selectedDayFont != nil {
+            self.selectedDayFont = selectedDayFont!
+        }
+        if weekNumberFont != nil {
+            self.weekNumberFont = weekNumberFont!
+        }
+        if dayOfWeekFont != nil {
+            self.dayOfWeekFont = dayOfWeekFont!
+        }
+        if currentMonthFont != nil {
+            self.currentMonth = currentMonthFont!
+        }
     }
-
 }
 
 public struct DLCalendarView: View {
+    @Environment(\.calendarStyle) var calendarStyle
     
     @Binding public var selectedDate: Date
 
@@ -33,6 +48,10 @@ public struct DLCalendarView: View {
     
     public typealias MonthChange = ((Int, Int)->Void)
     @State public var onMonthChangeAction: MonthChange?
+    
+    private var style: DLCalendarStyle {
+        (calendarStyle) ?? .init()
+    }
     
     public init(selectedDate: Binding<Date>, currentMonth: Int, currentYear: Int, showCalendar: Binding<Bool>, refresh: Bool = false, flaggedDays: [Int]? = nil, onMonthChangeAction: MonthChange? = nil) {
         self._currentMonth = State(wrappedValue: currentMonth)
@@ -48,7 +67,6 @@ public struct DLCalendarView: View {
         return DLCalendarView(selectedDate: self.$selectedDate, currentMonth: self.currentMonth, currentYear: self.currentYear, showCalendar: self.$showCalendar, refresh: self.refresh, flaggedDays: self.flaggedDays, onMonthChangeAction: action)
     }
     
-    
     fileprivate func getDayCell(_ day: Int) -> some View {
         var comp = DateComponents()
         comp.day = day
@@ -61,7 +79,7 @@ public struct DLCalendarView: View {
         let isFlagged = flaggedDays != nil && flaggedDays!.contains(day) && !self.isSelectedDate(day: day, selectedDate: self.selectedDate)
         
         return DLCalendarCell(text: String(day), isFlagged: isFlagged)
-            .font(self.isSelectedDate(day: day, selectedDate: self.selectedDate) ? DLCalendarConstants.font.selectedDayFont : DLCalendarConstants.font.dayFont)
+            .font(self.isSelectedDate(day: day, selectedDate: self.selectedDate) ? style.selectedDayFont : style.dayFont)
             .foregroundColor(isToday ? .red : (isWeekend ? .secondary : .primary))
             .padding(0)
             .onTapGesture {
@@ -90,7 +108,7 @@ public struct DLCalendarView: View {
                     }
                 }.padding([.horizontal])
                 Spacer()
-                Text("\(Calendar.current.monthSymbols[self.currentMonth-1]) \(String(self.currentYear))").font(DLCalendarConstants.font.currentMonth)
+                Text("\(Calendar.current.monthSymbols[self.currentMonth-1]) \(String(self.currentYear))").font(style.currentMonth)
                     .onTapGesture {
                         self.currentMonth = Calendar.current.component(.month, from: Date())
                         self.currentYear = Calendar.current.component(.year, from: Date())
@@ -116,19 +134,19 @@ public struct DLCalendarView: View {
             }
             HStack(spacing: 2) {
                 Spacer().frame(width: 15)
-                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[0].prefix(3).uppercased())").font(DLCalendarConstants.font.dayOfWeekFont).foregroundColor(.secondary)
+                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[0].prefix(3).uppercased())").font(style.dayOfWeekFont).foregroundColor(.secondary)
                         .frame(width: (UIScreen.main.bounds.width-45)/7)
-                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[1].prefix(3).uppercased())").font(DLCalendarConstants.font.dayOfWeekFont).foregroundColor(.secondary)
+                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[1].prefix(3).uppercased())").font(style.dayOfWeekFont).foregroundColor(.secondary)
                         .frame(width: (UIScreen.main.bounds.width-45)/7)
-                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[2].prefix(3).uppercased())").font(DLCalendarConstants.font.dayOfWeekFont).foregroundColor(.secondary)
+                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[2].prefix(3).uppercased())").font(style.dayOfWeekFont).foregroundColor(.secondary)
                         .frame(width: (UIScreen.main.bounds.width-45)/7)
-                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[3].prefix(3).uppercased())").font(DLCalendarConstants.font.dayOfWeekFont).foregroundColor(.secondary)
+                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[3].prefix(3).uppercased())").font(style.dayOfWeekFont).foregroundColor(.secondary)
                         .fixedSize().frame(width: (UIScreen.main.bounds.width-45)/7)
-                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[4].prefix(3).uppercased())").font(DLCalendarConstants.font.dayOfWeekFont).foregroundColor(.secondary)
+                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[4].prefix(3).uppercased())").font(style.dayOfWeekFont).foregroundColor(.secondary)
                         .frame(width: (UIScreen.main.bounds.width-45)/7)
-                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[5].prefix(3).uppercased())").font(DLCalendarConstants.font.dayOfWeekFont).foregroundColor(.secondary)
+                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[5].prefix(3).uppercased())").font(style.dayOfWeekFont).foregroundColor(.secondary)
                         .frame(width: (UIScreen.main.bounds.width-45)/7)
-                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[6].prefix(3).uppercased())").font(DLCalendarConstants.font.dayOfWeekFont).foregroundColor(.secondary)
+                    DLCalendarCell(text: "\(Calendar.current.weekdaySymbols[6].prefix(3).uppercased())").font(style.dayOfWeekFont).foregroundColor(.secondary)
                         .frame(width: (UIScreen.main.bounds.width-45)/7)
             }.frame(height: 20)
             HStack(spacing: 2) {
@@ -304,7 +322,7 @@ public struct DLCalendarView: View {
     func getNumberOfWeekCell(week: Int, month: Int, year: Int) -> some View {
         let weekNumber = self.getNumberOfWeek(week: week, month: month, year: year)
         return VStack {
-            Text(String(weekNumber)).font(DLCalendarConstants.font.weekNumberFont).foregroundColor(.secondary)
+            Text(String(weekNumber)).font(style.weekNumberFont).foregroundColor(.secondary)
         }.frame(width: 15).padding([.vertical], 3)
     }
     
@@ -333,8 +351,28 @@ struct DLCalendarCell: View {
     
 }
 
+struct CalendarStyleEnvironmentKey: EnvironmentKey {
+    static var defaultValue: DLCalendarStyle?
+}
+
+extension EnvironmentValues {
+    var calendarStyle: DLCalendarStyle? {
+        get { self[CalendarStyleEnvironmentKey.self] }
+        set { self[CalendarStyleEnvironmentKey.self] = newValue }
+    }
+}
+
+extension View {
+    public func calendarStyle(_ style: DLCalendarStyle) -> some View {
+        environment(\.calendarStyle, style)
+    }
+}
+
 struct DLCalendar_Preview: PreviewProvider {
     public static var previews: some View {
         DLCalendarView(selectedDate: .constant(Date()), currentMonth: 8, currentYear: 2020, showCalendar: .constant(true))
+            .calendarStyle(DLCalendarStyle(
+                selectedDayFont: Font.system(.caption).bold(),
+                currentMonthFont: Font.system(.caption, design: .rounded).bold()))
     }
 }
