@@ -158,7 +158,7 @@ public struct DLCalendarView: View {
                             .overlay(RoundedRectangle(cornerRadius: 20)
                                         .stroke(self.isSelectedDate(day: day, selectedDate: self.selectedDate) ? Color.secondary : Color(UIColor.clear), lineWidth: 1))
                     }
-                }.fixedSize().frame(height: 20)
+                }.fixedSize().frame(height: 22)
             HStack(spacing: 2) {
                     self.getNumberOfWeekCell(week: 2, month: self.currentMonth, year: self.currentYear).fixedSize().frame(width: 15)
                     ForEach(self.getWeekOfMonth(week: 2, month: self.currentMonth, year: self.currentYear), id: \.self) { day in
@@ -168,7 +168,7 @@ public struct DLCalendarView: View {
                             .overlay(RoundedRectangle(cornerRadius: 20)
                                         .stroke(self.isSelectedDate(day: day, selectedDate: self.selectedDate) ? Color.secondary : Color(UIColor.clear), lineWidth: 1))
                     }
-                }.fixedSize().frame(height: 20)
+                }.fixedSize().frame(height: 22)
             HStack(spacing: 2) {
                     self.getNumberOfWeekCell(week: 3, month: self.currentMonth, year: self.currentYear).fixedSize().frame(width: 15)
                     ForEach(self.getWeekOfMonth(week: 3, month: self.currentMonth, year: self.currentYear), id: \.self) { day in
@@ -178,7 +178,7 @@ public struct DLCalendarView: View {
                             .overlay(RoundedRectangle(cornerRadius: 20)
                                         .stroke(self.isSelectedDate(day: day, selectedDate: self.selectedDate) ? Color.secondary : Color(UIColor.clear), lineWidth: 1))
                     }
-                }.fixedSize().frame(height: 20)
+                }.fixedSize().frame(height: 22)
             HStack(spacing: 2) {
                     self.getNumberOfWeekCell(week: 4, month: self.currentMonth, year: self.currentYear).fixedSize().frame(width: 15)
                     ForEach(self.getWeekOfMonth(week: 4, month: self.currentMonth, year: self.currentYear), id: \.self) { day in
@@ -188,7 +188,7 @@ public struct DLCalendarView: View {
                             .overlay(RoundedRectangle(cornerRadius: 20)
                                         .stroke(self.isSelectedDate(day: day, selectedDate: self.selectedDate) ? Color.secondary : Color(UIColor.clear), lineWidth: 1))
                     }
-                }.fixedSize().frame(height: 20)
+                }.fixedSize().frame(height: 22)
             if self.getWeekOfMonth(week: 5, month: self.currentMonth, year: self.currentYear)[0] != 0 {
                 HStack(spacing: 2) {
                     self.getNumberOfWeekCell(week: 5, month: self.currentMonth, year: self.currentYear).fixedSize().frame(width: 15)
@@ -199,7 +199,7 @@ public struct DLCalendarView: View {
                             .overlay(RoundedRectangle(cornerRadius: 20)
                                         .stroke(self.isSelectedDate(day: day, selectedDate: self.selectedDate) ? Color.secondary : Color(UIColor.clear), lineWidth: 1))
                     }
-                }.fixedSize().frame(height: 20)
+                }.fixedSize().frame(height: 22)
             }
             if self.getWeekOfMonth(week: 6, month: self.currentMonth, year: self.currentYear)[0] != 0 {
                 HStack(spacing: 2) {
@@ -211,7 +211,7 @@ public struct DLCalendarView: View {
                             .overlay(RoundedRectangle(cornerRadius: 20)
                                         .stroke(self.isSelectedDate(day: day, selectedDate: self.selectedDate) ? Color.secondary : Color(UIColor.clear), lineWidth: 1))
                     }
-                }.fixedSize().frame(height: 20)
+                }.fixedSize().frame(height: 22)
             }
         }
             .gesture(self.getDragGesture())
